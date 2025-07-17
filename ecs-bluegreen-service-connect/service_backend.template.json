@@ -1,0 +1,37 @@
+{
+    "cluster": "ECS_CLUSTER_NAME",
+    "serviceName": "bluegreen-backend",
+    "taskDefinition": "bluegreen-backend",
+    "serviceConnectConfiguration": {
+        "enabled": true,
+        "namespace": "bluegreen.local",
+        "services": [{
+            "portName": "http",
+            "discoveryName": "bluegreen-backend",
+            "clientAliases": [{
+                "port": 80,
+                "dnsName": "bluegreen-backend"
+            }]
+        }]
+    },
+    "desiredCount": 2,
+    "launchType": "FARGATE",
+    "deploymentConfiguration": {
+        "strategy": "BLUE_GREEN",
+        "bakeTimeInMinutes": 2
+    },
+    "networkConfiguration": {
+        "awsvpcConfiguration": {
+            "subnets": [
+                "SUBNET_ID1",
+                "SUBNET_ID2"
+            ],
+            "securityGroups": [
+                "BACKEND_SG"
+            ],
+            "assignPublicIp": "DISABLED"
+        }
+    },
+    "healthCheckGracePeriodSeconds": 30,
+    "schedulingStrategy": "REPLICA"
+}

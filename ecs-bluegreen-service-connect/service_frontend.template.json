@@ -1,0 +1,32 @@
+{
+    "cluster": "ECS_CLUSTER_NAME",
+    "serviceName": "bluegreen-frontend",
+    "taskDefinition": "bluegreen-frontend",
+    "loadBalancers": [
+        {
+            "targetGroupArn": "BLUE_GREEN_TARGET_GROUP",
+            "containerName": "application",
+            "containerPort": 80
+        }
+    ],
+    "serviceConnectConfiguration": {
+        "enabled": true,
+        "namespace": "bluegreen.local"
+    },
+    "desiredCount": 1,
+    "launchType": "FARGATE",
+    "networkConfiguration": {
+        "awsvpcConfiguration": {
+            "subnets": [
+                "SUBNET_ID1",
+                "SUBNET_ID2"
+            ],
+            "securityGroups": [
+                "FRONTEND_SG"
+            ],
+            "assignPublicIp": "DISABLED"
+        }
+    },
+    "healthCheckGracePeriodSeconds": 30,
+    "schedulingStrategy": "REPLICA"
+}

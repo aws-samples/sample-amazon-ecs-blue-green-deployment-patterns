@@ -1,0 +1,54 @@
+{
+    "family": "bluegreen-frontend",
+    "executionRoleArn": "TASK_EXECUTION_ROLE",
+    "networkMode": "awsvpc",
+    "containerDefinitions": [
+        {
+            "name": "application",
+            "image": "public.ecr.aws/nginx/nginx:1.28",
+            "versionConsistency": "enabled",
+            "portMappings": [
+                {
+                    "containerPort": 80,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "systemControls": [
+                {
+                    "namespace": "net.ipv6.conf.all.disable_ipv6",
+                    "value": "1"
+                },
+                {
+                    "namespace": "net.ipv6.conf.default.disable_ipv6",
+                    "value": "1"
+                },
+                {
+                    "namespace": "net.ipv6.conf.lo.disable_ipv6",
+                    "value": "1"
+                }
+            ],
+            "entryPoint": [
+                "sh",
+                "-c"
+            ],
+            "command": [
+                "echo 'events {worker_connections 1024;} http {upstream backend {server bluegreen-backend:80;} server {listen 80; location / { proxy_pass http://backend; proxy_http_version 1.1; proxy_pass_request_headers on;}}}' > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "TASK_LOG_GROUP_NAME",
+                    "awslogs-region": "REGION",
+                    "awslogs-stream-prefix": "bluegreen-frontend"
+                }
+            }
+        }
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "512",
+    "memory": "1024"
+}

@@ -1,0 +1,41 @@
+{
+    "family": "bluegreen-backend",
+    "executionRoleArn": "TASK_EXECUTION_ROLE",
+    "networkMode": "awsvpc",
+    "containerDefinitions": [
+        {
+            "name": "application",
+            "image": "public.ecr.aws/docker/library/httpd:2.4.63",
+            "versionConsistency": "enabled",
+            "portMappings": [
+                {
+                    "name": "http",
+                    "containerPort": 80,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "entryPoint": [
+                "sh",
+                "-c"
+            ],
+            "command": [
+                "/bin/sh -c \"echo '<html><head><title>Green Version</title><style>body {margin: 0; padding: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background-color: green; color: white; font-family: Arial, sans-serif;} h1 {font-size: 3em;}</style></head><body><h1>Green Version</h1></body></html>' > /usr/local/apache2/htdocs/index.html && httpd-foreground\""
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "TASK_LOG_GROUP_NAME",
+                    "awslogs-region": "REGION",
+                    "awslogs-stream-prefix": "bluegreen-backend"
+                }
+            }
+        }
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "512",
+    "memory": "1024"
+}

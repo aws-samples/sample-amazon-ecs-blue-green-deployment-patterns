@@ -1,0 +1,23 @@
+*.js
+!jest.config.js
+*.d.ts
+node_modules
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+cdk.context.json
+.DS_Store
+package-lock.json
+
+# Test Scripts
+outputs/*
+outputs.sh
+tasks.sh
+
+taskdef_frontend.json
+taskdef_backend.json
+taskdef_backend_update.json
+service_backend_update.json
+service_backend.json
+service_frontend.json

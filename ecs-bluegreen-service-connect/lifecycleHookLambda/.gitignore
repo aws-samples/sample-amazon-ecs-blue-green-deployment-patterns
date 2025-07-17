@@ -1,0 +1,4 @@
+*.zip
+package/*
+!package/.gitkeep
+.DS_Store

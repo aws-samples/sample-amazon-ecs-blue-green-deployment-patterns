@@ -1,0 +1,39 @@
+{
+    "cluster": "ECS_CLUSTER_NAME",
+    "service": "bluegreen-backend",
+    "taskDefinition": "bluegreen-backend",
+    "serviceConnectConfiguration": {
+        "enabled": true,
+        "namespace": "bluegreen.local",
+        "services": [{
+            "portName": "http",
+            "discoveryName": "bluegreen-backend",
+            "clientAliases": [{
+                "port": 80,
+                "dnsName": "bluegreen-backend",
+                "testTrafficRules": {
+                    "header": {
+                        "name": "x-amzn-ecs-bluegreen-test",
+                        "value": {
+                            "exact": "test"
+                        }
+                    }
+                }
+            }]
+        }]
+    },
+    "desiredCount": 2,
+    "deploymentConfiguration": {
+        "strategy": "BLUE_GREEN",
+        "bakeTimeInMinutes": 2,
+        "lifecycleHooks": [
+            {
+                "hookTargetArn": "LAMBDA_FUNCTION",
+                "roleArn": "ECS_LAMBDA_INVOKE_ROLE",
+                "lifecycleStages": [
+                    "POST_TEST_TRAFFIC_SHIFT"
+                ]
+            }
+        ]
+    }
+}
