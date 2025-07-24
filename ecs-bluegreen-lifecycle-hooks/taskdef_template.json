@@ -1,0 +1,36 @@
+{
+    "family": "bluegreendemo",
+    "executionRoleArn": "ECS_TASK_EXECUTION_ROLE",
+    "networkMode": "awsvpc",
+    "containerDefinitions": [
+        {
+            "name": "retail-app",
+            "image": "public.ecr.aws/aws-containers/retail-store-sample-ui:1.1.0",
+            "versionConsistency": "enabled",
+            "portMappings": [
+                {
+                    "containerPort": 8080
+                }
+            ],
+            "environment": [
+                {
+                    "name": "RETAIL_UI_THEME",
+                    "value": "orange"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "ECS_LOG_GROUP_NAME",
+                    "awslogs-region": "AWS_REGION",
+                    "awslogs-stream-prefix": "retail-app"
+                }
+            }
+        }
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "512",
+    "memory": "1024"
+}

@@ -1,0 +1,56 @@
+{
+    "cluster": "ECS_CLUSTER_NAME",
+    "serviceName": "bluegreendemo",
+    "taskDefinition": "bluegreendemo",
+    "loadBalancers": [
+        {
+            "targetGroupArn": "BLUE_TARGET_GROUP_ARN",
+            "containerName": "retail-app",
+            "containerPort": 8080,
+            "advancedConfiguration": {
+                "alternateTargetGroupArn": "GREEN_TARGET_GROUP_ARN",
+                "productionListenerRule": "PROD_LISTENER_RULE_ARN",
+                "testListenerRule": "TEST_LISTENER_RULE_ARN",
+                "roleArn": "ECS_ALB_ROLE"
+            }
+        }
+    ],
+    "desiredCount": 1,
+    "launchType": "FARGATE",
+    "deploymentConfiguration": {
+        "minimumHealthyPercent": 100,
+        "maximumPercent": 200,
+        "strategy": "BLUE_GREEN",
+        "bakeTimeInMinutes": 1,
+        "lifecycleHooks": [
+            {
+                "hookTargetArn": "ADMISSION_HOOK_FUNCTION_ARN",
+                "roleArn": "ECS_LAMBDA_ROLE",
+                "lifecycleStages": [
+                    "PRE_SCALE_UP"
+                ]
+            },
+            {
+                "hookTargetArn": "APPROVAL_HOOK_FUNCTION_ARN",
+                "roleArn": "ECS_LAMBDA_ROLE",
+                "lifecycleStages": [
+                    "POST_TEST_TRAFFIC_SHIFT"
+                ]
+            }
+        ]
+    },
+    "networkConfiguration": {
+        "awsvpcConfiguration": {
+            "subnets": [
+                "PRIVATE_SUBNET_ONE",
+                "PRIVATE_SUBNET_TWO"
+            ],
+            "securityGroups": [
+                "TARGET_SECURITY_GROUP"
+            ],
+            "assignPublicIp": "DISABLED"
+        }
+    },
+    "healthCheckGracePeriodSeconds": 30,
+    "schedulingStrategy": "REPLICA"
+}

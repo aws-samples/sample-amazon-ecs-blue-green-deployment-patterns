@@ -1,14 +1,19 @@
-# Blue/Green Deployment with Amazon ECS
+# Amazon ECS blue/green deployment patterns
 
-This project demonstrates how to implement blue/green deployments with Amazon ECS using AWS CDK. It creates the necessary infrastructure for testing and validating deployments.
-The repository covers 2 scenarios:
+The repository contains sample code to help you get familiar with Amazon ECS
+[blue/green
+deployments](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/deployment-type-blue-green.html).
+The repository contains the following patterns: 
 
-- [Blue Green Deployment with ALB and lifecycle hooks](./ecs-bluegreen-lifecycle-hooks/README.md)
-- [Blue Green Deployment with Service Connect](./ecs-bluegreen-service-connect/README.md)
+- [Amazon ECS blue/green deployments with Service
+  Connect](./ecs-bluegreen-service-connect/README.md)
+- [Amazon ECS blue/green deployments with ALBs and Lifecycle
+  Hooks](./ecs-bluegreen-lifecycle-hooks/README.md)
 
 ## Security
 
-See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more
+information.
 
 ## License
 
