@@ -52,7 +52,7 @@ export class EcsBlueGreenServiceConnectStack extends cdk.Stack {
                 }
             ]
         });
-        this.vpc.addFlowLog("FlowLogs",{
+        this.vpc.addFlowLog("FlowLogs", {
             destination: ec2.FlowLogDestination.toCloudWatchLogs(),
             trafficType: ec2.FlowLogTrafficType.REJECT
         });
@@ -119,17 +119,18 @@ export class EcsBlueGreenServiceConnectStack extends cdk.Stack {
             },
             loadBalancerName: 'BlueGreenALB',
             idleTimeout: cdk.Duration.seconds(60)
-            
         });
 
         this.alb.logAccessLogs(new s3.Bucket(this, 'ApplicationLoadBalancerAccessLogs', {
             encryption: s3.BucketEncryption.S3_MANAGED,
             removalPolicy: cdk.RemovalPolicy.DESTROY,
+            autoDeleteObjects: true,
             enforceSSL: true,
             serverAccessLogsBucket: new s3.Bucket(this, 'S3ServerAccessLogs', {
                 encryption: s3.BucketEncryption.S3_MANAGED,
                 removalPolicy: cdk.RemovalPolicy.DESTROY,
                 enforceSSL: true,
+                autoDeleteObjects: true,
             })
         }));
 
