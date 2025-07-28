@@ -144,7 +144,7 @@ aws ecs \
     wait services-stable \
     --region $AWS_REGION \
     --cluster $ECS_CLUSTER_NAME \
-    --service $ECS_SERVICE_NAME \
+    --service $ECS_SERVICE_NAME
 ```
 
 ### Update Service with New Task Definition

@@ -51,6 +51,6 @@
             "assignPublicIp": "DISABLED"
         }
     },
-    "healthCheckGracePeriodSeconds": 30,
+    "healthCheckGracePeriodSeconds": 60,
     "schedulingStrategy": "REPLICA"
 }
