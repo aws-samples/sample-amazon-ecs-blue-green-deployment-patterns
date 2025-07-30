@@ -18,8 +18,6 @@
     "desiredCount": 1,
     "launchType": "FARGATE",
     "deploymentConfiguration": {
-        "minimumHealthyPercent": 100,
-        "maximumPercent": 200,
         "strategy": "BLUE_GREEN",
         "bakeTimeInMinutes": 1,
         "lifecycleHooks": [
