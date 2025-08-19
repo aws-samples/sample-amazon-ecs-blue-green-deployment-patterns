@@ -21,7 +21,7 @@ def hook_in_progress():
     logger.info("Sending hookStatus IN_PROGRESS back to ECS")
     return {
         "hookStatus": "IN_PROGRESS",
-        "callBackDelaySeconds": 30,
+        "callBackDelay": 30,
     }
 
 
