@@ -29,7 +29,7 @@ def hook_in_progress():
     callback_delay = int(os.environ.get("CALLBACK_DELAY_SECONDS", "30"))
     return {
         "hookStatus": "IN_PROGRESS",
-        "callBackDelaySeconds": callback_delay,
+        "callBackDelay": callback_delay,
     }
 
 
