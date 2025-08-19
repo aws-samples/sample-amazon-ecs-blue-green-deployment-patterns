@@ -172,6 +172,9 @@ def modify_listener_weights(prod_listener_rule_arn, actions):
     listener_arn = get_listener_arn_from_rule_arn(prod_listener_rule_arn)
     logger.info(f"Modifying listener: {listener_arn}")
 
+    # In this sample we only have one rule on our listener, the default rule.
+    # In a production environment we would expect there to be multiple rules on
+    # the listener so the modify_rules API may be more appropriate.
     try:
         modify_listener_response = elb_client.modify_listener(
             ListenerArn=listener_arn, DefaultActions=actions
