@@ -33,7 +33,10 @@
                 "roleArn": "ECS_LAMBDA_ROLE",
                 "lifecycleStages": [
                     "POST_TEST_TRAFFIC_SHIFT"
-                ]
+                ],
+                "hookDetails": {
+                    "S3_BUCKET_NAME": "S3_BUCKET_PLACEHOLDER"
+                }
             }
         ]
     },

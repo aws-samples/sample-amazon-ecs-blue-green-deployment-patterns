@@ -158,6 +158,14 @@ TARGET_SECURITY_GROUP=$(aws cloudformation describe-stacks \
     --output text)
 echo "Target Security Group: $TARGET_SECURITY_GROUP"
 
+# Get S3 Bucket Name
+S3_BUCKET_NAME=$(aws cloudformation describe-stacks \
+    --stack-name EcsBluegreenHookStack \
+    --region $AWS_REGION \
+    --query 'Stacks[0].Outputs[?OutputKey==`ApprovalBucketName`].OutputValue' \
+    --output text)
+echo "S3 Bucket Name: $S3_BUCKET_NAME"
+
 # Detect OS for sed compatibility
 echo "Detecting operating system for sed compatibility..."
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -190,6 +198,7 @@ $SED_CMD "s|TEST_LISTENER_RULE_ARN|$TEST_LISTENER_RULE_ARN|g" outputs/service.js
 $SED_CMD "s|PRIVATE_SUBNET_ONE|$PRIVATE_SUBNET_ONE|g" outputs/service.json
 $SED_CMD "s|PRIVATE_SUBNET_TWO|$PRIVATE_SUBNET_TWO|g" outputs/service.json
 $SED_CMD "s|TARGET_SECURITY_GROUP|$TARGET_SECURITY_GROUP|g" outputs/service.json
+$SED_CMD "s|S3_BUCKET_PLACEHOLDER|$S3_BUCKET_NAME|g" outputs/service.json
 
 echo "Templates have been populated successfully!"
 echo ""
