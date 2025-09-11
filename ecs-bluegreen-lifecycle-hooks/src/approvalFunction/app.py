@@ -22,6 +22,7 @@ def hook_in_progress():
     return {
         "hookStatus": "IN_PROGRESS",
         "callBackDelay": 30,
+        "hookDetails": {"createServiceCheck": True},
     }
 
 
@@ -82,26 +83,40 @@ def check_s3_file(s3_bucket, revision_arn):
 def lambda_handler(event, context):
     logger.info(event)
 
-    if "S3_BUCKET" not in os.environ:
-        logger.error("S3_BUCKET was not passed into the function")
-        return hook_failed()
-    s3_bucket = os.environ.get("S3_BUCKET")
-
     for var in ["serviceArn", "targetServiceRevisionArn"]:
         if var not in event["executionDetails"]:
             error_message = f"Event is missing required {var}"
             logger.error(error_message)
             raise Exception(error_message)
 
+    if "hookDetails" not in event:
+        logger.error("No state passed into the function, hookDetails are required")
+        return hook_failed()
+
+    if "S3_BUCKET_NAME" not in event["hookDetails"]:
+        logger.error("S3_BUCKET_NAME was not passed into the function")
+        return hook_failed()
+    s3_bucket = event["hookDetails"]["S3_BUCKET_NAME"]
+
     service_arn = event["executionDetails"]["serviceArn"]
     service_revision = event["executionDetails"]["targetServiceRevisionArn"]
 
-    # if there is only one service revision, we dont check for the s3 file.
-    # There is an assumption here that manual approval is not required on the
-    # first deployment of a service.
-    is_create_service = check_service_revision(service_arn)
-    if is_create_service:
-        return hook_succeeded()
+    # if this is a repeat invocation of this hook in this deployment, there is
+    # no need to check if this is a new service. We know if its a repeat
+    # invocation because we pass state into the hookDetails in every invocation.
+    is_first_invocation = True
+    if "createServiceCheck" in event["hookDetails"]:
+        if event["hookDetails"]["createServiceCheck"]:
+            logger.info(
+                f"This is not the first invocation of this hook for {service_revision}"
+            )
+            is_first_invocation = False
+
+    if is_first_invocation:
+        # Check if this create service or update service
+        is_create_service = check_service_revision(service_arn)
+        if is_create_service:
+            return hook_succeeded()
 
     # See if file is in s3
     file_exists = check_s3_file(s3_bucket, service_revision)

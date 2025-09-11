@@ -30,6 +30,7 @@ def hook_in_progress():
     return {
         "hookStatus": "IN_PROGRESS",
         "callBackDelay": callback_delay,
+        "hookDetails": {"createServiceCheck": True},
     }
 
 
@@ -234,12 +235,22 @@ def lambda_handler(event, context):
     service_arn = event["executionDetails"]["serviceArn"]
     service_revision = event["executionDetails"]["targetServiceRevisionArn"]
 
-    # if there is only one service revision, we dont check for the s3 file.
-    # There is an assumption here that manual approval is not required on the
-    # first deployment of a service.
-    is_create_service = check_service_revision(service_arn)
-    if is_create_service:
-        return hook_succeeded()
+    # if there is only one service revision, it is the first time this service
+    # has been deployed therefore we dont need to do a linear traffic shift.
+    is_first_invocation = True
+    if "hookDetails" in event:
+        if "createServiceCheck" in event["hookDetails"]:
+            if event["hookDetails"]["createServiceCheck"]:
+                logger.info(
+                    f"This is not the first invocation of this hook for {service_revision}"
+                )
+                is_first_invocation = False
+
+    if is_first_invocation:
+        # Check if this create service or update service
+        is_create_service = check_service_revision(service_arn)
+        if is_create_service:
+            return hook_succeeded()
 
     logger.info("Proceeding with Canary Traffic Switching")
     try:

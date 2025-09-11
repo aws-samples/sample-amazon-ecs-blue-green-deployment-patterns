@@ -356,7 +356,6 @@ export class EcsBluegreenHookStack extends cdk.Stack {
             memorySize: 128,
             environment: {
                 POWERTOOLS_SERVICE_NAME: 'ECS_INIT_FUNCTION',
-                S3_BUCKET: approvalBucket.bucketName,
             },
             functionName: approvalFunctionName,
             role: approvalFunctionRole,
