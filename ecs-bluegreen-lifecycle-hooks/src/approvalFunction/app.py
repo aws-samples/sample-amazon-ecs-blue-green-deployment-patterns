@@ -17,12 +17,15 @@ def hook_failed():
     return {"hookStatus": "FAILED"}
 
 
-def hook_in_progress():
+def hook_in_progress(s3_bucket):
     logger.info("Sending hookStatus IN_PROGRESS back to ECS")
     return {
         "hookStatus": "IN_PROGRESS",
         "callBackDelay": 30,
-        "hookDetails": {"createServiceCheck": True},
+        "hookDetails": {
+          "createServiceCheck": True,
+          "S3_BUCKET_NAME": s3_bucket
+        }
     }
 
 
@@ -123,4 +126,4 @@ def lambda_handler(event, context):
     if file_exists:
         return hook_succeeded()
 
-    return hook_in_progress()
+    return hook_in_progress(s3_bucket)
