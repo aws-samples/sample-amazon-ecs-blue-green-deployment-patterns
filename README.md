@@ -3,12 +3,14 @@
 The repository contains sample code to help you get familiar with Amazon ECS
 [blue/green
 deployments](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/deployment-type-blue-green.html).
-The repository contains the following patterns: 
+The repository contains the following patterns:
 
 - [Amazon ECS blue/green deployments with Service
   Connect](./ecs-bluegreen-service-connect/README.md)
 - [Amazon ECS blue/green deployments with ALBs and Lifecycle
   Hooks](./ecs-bluegreen-lifecycle-hooks/README.md)
+- [Amazon ECS blue/green deployments with ALBs and Application Auto
+  Scaling](./ecs-bluegreen-autoscaling/README.md)
 
 ## Security
 
