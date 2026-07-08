@@ -11,6 +11,8 @@ The repository contains the following patterns:
   Hooks](./ecs-bluegreen-lifecycle-hooks/README.md)
 - [Amazon ECS blue/green deployments with ALBs and Application Auto
   Scaling](./ecs-bluegreen-autoscaling/README.md)
+- [Amazon ECS blue/green deployments with SQS headless
+  processing](./ecs-bluegreen-sqs-processing/README.md)
 
 ## Security
 
